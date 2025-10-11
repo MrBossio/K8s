@@ -1,0 +1,179 @@
+{
+  "main": {
+    "id": "b8ae8143508e76d6",
+    "type": "split",
+    "children": [
+      {
+        "id": "57af9817d4364c85",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "18b7bf4c411cf8d3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Kubernetes for the Absolute Beginners - Hands-On"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ab1efedd6fc1a398",
+    "type": "split",
+    "children": [
+      {
+        "id": "aaa4cf4ce3388cb2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "91a1125c4f4feeda",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "9b804a6710684171",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "ade0829c15305762",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 395.5124969482422
+  },
+  "right": {
+    "id": "018056c5764dfdb2",
+    "type": "split",
+    "children": [
+      {
+        "id": "35f1978d6e853510",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c1e4bcfffc084ebe",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Kubernetes for the Absolute Beginners - Hands-On"
+            }
+          },
+          {
+            "id": "3a2bf4634e3bb74d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Kubernetes for the Absolute Beginners - Hands-On"
+            }
+          },
+          {
+            "id": "21bdb369c590e2df",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "f64a52aa39aebb92",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Kubernetes for the Absolute Beginners - Hands-On"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "18b7bf4c411cf8d3",
+  "lastOpenFiles": [
+    "Pasted image 20241025010813.png",
+    "Pasted image 20241025010304.png",
+    "Pasted image 20241025005930.png",
+    "KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025002021.png",
+    "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
+    "KubernetesForTheAbsoluteBeginners-Hands-On/images",
+    "KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025003113.png",
+    "KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025002228.png",
+    "KubernetesForTheAbsoluteBeginners-Hands-On",
+    "desktop.ini"
+  ]
+}

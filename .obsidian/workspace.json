@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
+                "file": "1-KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
                 "mode": "source",
                 "source": false
               },
@@ -163,17 +163,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "18b7bf4c411cf8d3",
+  "active": "91a1125c4f4feeda",
   "lastOpenFiles": [
-    "Pasted image 20241025010813.png",
-    "Pasted image 20241025010304.png",
-    "Pasted image 20241025005930.png",
-    "KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025002021.png",
-    "KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
-    "KubernetesForTheAbsoluteBeginners-Hands-On/images",
-    "KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025003113.png",
-    "KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025002228.png",
-    "KubernetesForTheAbsoluteBeginners-Hands-On",
+    "README.md",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/Kubernetes for the Absolute Beginners - Hands-On.md",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025005930.png",
+    "LICENSE",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025010813.png",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025010304.png",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025002021.png",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025003113.png",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On/images/Pasted image 20241025002228.png",
+    "1-KubernetesForTheAbsoluteBeginners-Hands-On",
     "desktop.ini"
   ]
 }

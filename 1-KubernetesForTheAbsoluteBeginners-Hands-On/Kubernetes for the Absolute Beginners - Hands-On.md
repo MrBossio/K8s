@@ -24,7 +24,6 @@ The Master watches over the Nodes in the Cluster and is responsible for the actu
 
 
 ## kubectl
-
 The kubecontrol tool is used to deploy and manage applications on a Kubernetes Cluster, to get Cluster information, to get the status of other Nodes in the Cluster and to manage many other things.
 
 The *kubectl run* command is used to deploy an application on the Cluster.

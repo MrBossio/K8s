@@ -1,0 +1,767 @@
+
+sudo chmod 666 /var/run/docker.sock
+
+## dockerfile:
+
+A dockerfile es un blueprint de la imagen, instrucciones para construirla
+la imagen es en si inmutable y read only
+la imagen es un template para containers
+El container es la imagen corriendo, con una parte readonly y otra permite write
+
+La imagen se crea usando las instrucciones del dockerfile
+cada instruccion del dockerfile crea una capa readonly
+al final se agrega una capa write, cuando la imagen corre como un container
+
+si se usan varias instancias de una imagen, la capa rw se puede compartir entre estas para ahorrar espacio
+
+## docker terminal commands:
+
+```bash
+#login and logout
+docker login
+docker logout
+```
+
+### build
+```bash
+#crea un container, requiere un docker file, permite agregar un tag
+build 
+	
+docker build -t websitebuild:latest .
+docker build  -t goalsapp:v1.1 . 
+docker build -t my-app:v1 . 
+	# usar el dockerfile para crear un archivo
+	# -t: indica la opcion tag
+	# si se omite el hostname vamos a trabajar sobre docker hub
+	# my-app: es el repositorio
+	# v1: version del repo
+	# .  es un shortcut al directorio actual, donde esta el Dockerfile
+	# en el ejemplo estamos usando el wd, por eso ponemos . como argumento
+
+# La salida sera algo asi como:
+Sending build context to Docker daemon 15.36 kB
+Step 1/5 ... se observara una serie de instrucciones, tantas como se especificaron en el dockerfile
+Successfully built asd46461asd
+Successfully tagged my-app:v1
+```
+
+### tag
+Nombrar imagenes
+si Existe una imagen, copia la imagen y le cambia el nombre
+decir no sobreescribe archivos
+```shell
+docker tag my-app:v1 second-app:v1
+	# muestra una tabla con las columnas 
+		REPOSITORY 	TAG 	IMAGEID 	CREATED 		SIZE
+		my-app		v1		vbf61661	2 minutes ago	78.25 MB
+		second-app	v1		vbf61661	2 minutes ago	78.25 MB
+	# son la misma imagen con diferente nombre
+```
+
+### images
+```shell
+# listar las imagenes con detalles como repositorios y tamano	
+docker image ls
+	# muestra una tabla con las columnas 
+		REPOSITORY 	TAG 	IMAGEID 	CREATED 		SIZE
+		my-app		v1		vbf61661	2 minutes ago	78.25 MB
+```
+
+### remove
+remueve la imagen
+```shell
+	~docker image rm iddelaimagen
+```
+
+### run
+lanza un nuevo container, default attached
+```shell
+docker run my-app:v1 
+		Hello, world!
+
+# -d
+# Run container in background and print container ID	
+docker run -d nginx:latest 
+
+# -p
+# redirige al puerto especificado
+docker run -d -p 8080:80 nginx:latest
+	# localhost port to docker app port
+	# si se lanza docker ps, se obtiene en los puertos: 0.0.0.0:8080->80/tcp
+	# se pueden mapear varios puertos (ojo que el 80 es la entrada de este dockerfile)
+	-p 8080:80 -p 3000:80
+
+# --name
+# name para asignar un nombre
+	# docker run -p 3000:80 -d --rm --name <containerCustomName> <imageRepo>:<imageTag>
+	# si no se asigna un nombre, se genera random
+	# Ejemplo
+	docker run --name mywebsite -d -p 8080:80 nginx:latest 
+	docker run -p 3000:80 -d --rm --name goalsAppContainer goalsapp:v1.1
+	docker run --name userbuild -d -p 3000:3000 user-service-api:latest
+		# aca se usa 3000:3000 porque node utiliza el puerto 3000 por defecto
+		# (el contenedor es app js)		
+
+```
+
+### start 			
+inicia un container existente, default detached
+```shell
+docker start containerid # default detached
+docker start -a containerid # attached
+```
+
+### attach 		
+attach el output del container al terminal
+```
+docker attach containerid
+```
+
+### logs
+muestra el output del container al terminal
+```shell
+docker logs containerid	# muestra los logs pasados
+docker logs -f containerid # muestra los logs pasados y hace attach al terminar para logs futuros (-follow)
+```
+
+### stop			
+detiene un container by id
+```shell
+docker stop bc73289f0517 
+	# tambien vale el nombre del container que muestra docker ps
+	# si funciona, devuelve el container id o el name
+```
+
+### rm, rmi, prune 
+remove containers
+```shell
+docker rm fa4b012f9c3c #remove a specific container
+
+docker rm $(docker ps -aq) # remove all, except running
+	# con ps -aq se listan ids, que luego se usan para el comando rm
+
+docker rm -f $(docker ps -aq) # remove all including running
+
+docker run -p xxxx:xxxx -d --rm containerid
+	# indica que cuando el container se detenga, se autoelimine
+
+rmi  or image rm 	# remove images
+docker image rm imageid
+docker rmi imageid
+
+prune # remove all images
+```
+
+### push/pull		
+sube una imagen o descarga una imagen desde una ubicacion remota
+```shell
+docker pull nginx # descarga un contenedor con el servidor nginx
+docker pull node:lts-alpine # descarga una version de node mínima
+docker pull nginx:alpine
+
+#Ejm
+docker push my-app:v1
+	The push refers to repository [docker.io/my-app]
+	sad52121asd: Pushed
+	sda654654: Pushed
+	...
+	#se debe mostrar cada capa de la imagen siendo pusheada
+
+# para pushear, se debe tagear para colocarlo en un repo de dockerhub
+docker tag user-service-api:latest mrbossio/user-service-api:latest
+# entonces ya se puede pushear	
+docker push mrbossio/user-service-api:latest	
+	
+```
+
+### container		
+container se usa con varios comandos en combinación
+```shell
+
+# ls lista los container
+docker container ls
+	CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS     NAMES
+		fa4b012f9c3c   nginx:latest   "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   80/tcp    gallant_hopper
+
+docker ps # muestra containers corriendo (por defecto)
+docker ps --help # muestra comandos de ps
+	# por ejemplo -a all, -l latest 
+```
+
+### inspect 
+```shell
+docker image inspect <id>
+	# devuelve un json con la info de la imagen
+docker inspect <id>
+	# devuelve un json con la info del container, de software y hardware
+
+```
+
+### logs
+``` shell
+docker logs <id>
+	# devuelve el log actual del respectivo container
+docker logs  -f <id>   //following
+    # devuelve el log en tiempo real
+```
+
+### exec, run, start interactive
+``` shell
+docker exec -it baad789a8b8b bash
+	# abre una terminan en el container
+	# -i interactive, -t tty
+	# interactive keep stdin open even if no attached, tty allocate a pseudo-tty
+
+docker run -it 71fb2bc2145b	
+	# flag -t no será necesario posteriormente, ya que forma parte de la configuración de run
+
+docker start -a -i 55dc8de1740a
+	# interactive restart with stdin open and attached
+	
+```
+
+### copy
+```shell
+# from local to container
+docker cp sourcefolder/sourcefile.ext  containername:/foldername	
+	# for specific file
+
+docker cp sourcefolder/. containername:/foldername		
+	# for all files in folder
+
+# from container to local
+docker cp containername:/foldername destinationfolder
+	# folder to folder (copy folder and content, a folder "foldername" will be created)
+docker cp containername:/foldername/sourcefile.ext destinationfolder
+```
+
+### volumes
+```shell
+# create a bind volume
+docker run -d -p 3000:80 --rm 	--name feedback-app 	-v feedback:/app/feedback 		feedback-node:volumes
+	# -v feedback:/app/feedback mounts a named volume called `feedback`
+	# this is mounted in to the container’s `/app/feedback` directory.
+	# This allows persistent storage of feedback data.
+	
+# list volumes
+docker volume ls
+
+# delete
+docker volume rm <volumeid>
+docker volume prune
+
+# bind mount	
+# en este caso hay dos carpetas: volume (persiste, donde guarda txt) y bind mount (que se conecta interactiva para code)
+docker run -d -p 3000:80 --rm 	--name feedback-app 	-v feedback:/app/feedback 		-v "/media/marina/myfolder:/app"	feedback-node:volumes
+	# -v feedback:/app/feedback mounts a **named volume** `feedback` to `/app/feedback` inside the container. This persists feedback data across runs.
+	# -v "/media/marina/myfolder:/app" mounts a host directory (`/media/marina/myfolder`) to `/app` inside the container. This overrides anything in `/app`, including `/app/feedback`
+
+
+# If we dont want that bind mount overwrite our node modules created by npm install, we can use 
+	# VOLUME ["/app/node_modules"] 
+# or we can use a anon volume using -v /app/node_modules in terminal
+	# the longer path have preference if clash between two volumes, and command line have preference over dockerfile
+
+docker run -d -p 3000:80 --rm 	--name feedback-app 	-v feedback:/app/feedback 		-v $(pwd):/app		-v /app/node_modules feedback-node:volumes
+	#to add read only flag (ro only inside container), obviously can be override with another anon volume with longer path
+	-v $(pwd):/app:ro
+
+```
+
+### env variables
+```shell
+# se agregan en el dockerfile
+# Ejem
+ ENV PORT 80 #(nombre, default)
+# y se referencia usando $ como en EXPOSE $PORT	
+# luego se agrega con un flag
+	-e PORT = 8000
+
+# si se utiliza un archivo .env, se usa el flag env-file
+	--env-file ./.env
+
+docker run -d -p 3000:8000 --env-file ./.env --rm --name feedback-app 	-v feedback:/app/feedback 		-v $(pwd):/app		-v /app/node_modules feedback-node:env
+```
+
+### arg variables
+```shell
+# en dockerfile se agregan como ARG DEFAULT_PORT=80  y se referencian tipo ENV PORT $DEFAULT_PORT
+# se puede referenciar en cualquier linea menos CMD
+# luego se agrega en build con un flag
+	--build-arg DEFAULT_PORT=8000
+```
+
+### network
+comparte una misma red entre contenedores
+```shell
+# crear network
+docker network create <networkname>
+docker network create favorites-net
+
+# lanzar containers en network
+docker run -d --name mongodb --network <networkname> mongo
+docker run --name favorites -d --rm -p 3000:3000 --network <networkname> favorites-node
+
+```
+
+### Ejemplos
+```
+******************
+compartir un folder con un container dentro de docker:
+******************
+
+	~docker run --name mywebsite1 -v $(pwd):/usr/share/nginx/html:ro -d -p 8080:80 nginx:latest
+		//ro es un flag de readonly (no podra escribir en el sistema anfitrion)
+		//$(pwd) es un comando de linux para obtener el working directory, tambien se puede usar rutas absolutas
+	~docker run --name mywebsite1 -v E:\Google_Drive\2022-0\Tuxpas\Docker_and_Kubernetes_AmigosCode:/usr/share/nginx/html -d -p 8080:80 nginx:latest
+		//no es readonly asi que puede escribir en el sistema anfitrion, en la carpeta indexada
+
+	~docker run --name mywebsite2 --volumes-from mywebsite1 -d -p 8081:80 nginx:latest
+		//se puede crear un container usando --volumes-from para copiar desde otro container
+
+
+******************
+entrar al container:
+******************
+	
+	//si la plataforma lo permite, por ejemplo linux, se puede hacer
+	~docker exec -it mywebsite1 bash //-interactive -pseudoTTY
+
+	~docker exec -it <id> /bin/sh
+		//ademas con inspect, se puede buscar en el tag "Cmd" los ejecutables
+
+		//el terminal se abre en el wd de la imagen
+
+```
+
+## Dockerfiles:
+dockerfile es una serie de instrucciones para crear un container
+Ejem:
+```DockerFile
+# dockerfile
+	FROM node:9.4.0-alpine
+	#copy file to workdir
+	COPY app.js .
+	COPY package.json . 
+	#run on workdir
+	RUN npm install &&\
+		apk update &&\
+		apk upgrade
+	CMD node app.js 
+
+# otro ejemplo
+
+	FROM nginx:latest
+	ADD . /usr/share/nginx/html
+
+# otro
+
+	FROM node:latest
+	WORKDIR /app   
+	# selecciona el wd, si no existe lo crea, y pasa a sar el wd actual
+	ADD . .  
+	# copia todo del wd de la pc, al wd de la imagen, tambien sirve COPY . .
+	RUN npm install 
+	CMD node index.js
+	
+# si queremos aprovechar el cache
+	FROM node:latest
+	WORKDIR /app
+	ADD package*.json .   
+		# agrega los archivos antes de hacer el install
+	RUN npm install 		
+		# hace el install	
+	ADD . .
+		# recien aqui agrega los archivos
+	CMD node index.js
+		# asi cuando hay cambios, reusa la cache de lo hecho hasta el install
+		# y solo realizara el paso del add
+```
+
+### comandos del dockerfile
+```DockerFile
+FROM: 			
+	# define la imagen base, con el SO o herramientas del lenguaje
+	# que permitiran ejecutar la imagen 
+
+WORKDIR:		
+	# setea un working directory
+	WORKDIR /app
+
+ENV y ARG:
+	# setea las variables de entorno y variables en build
+
+	#using args
+	ARG DEFAULT_PORT=80
+	ENV PORT $DEFAULT_PORT
+	EXPOSE $PORT				
+	# se llama usando 
+	--build-arg DEFAULT_PORT=8000
+
+	#using env
+	ENV PORT 80
+	EXPOSE $PORT
+	# se llama usando  un flag
+	-e PORT = 8000
+	# si se utiliza un archivo .env, se usa el flag env-file
+	--env-file ./.env
+
+ADD y COPY: 	
+	# son similares, activa la copia de archivos en la imagen, 
+	# permite insertar el codigo o ejecutable en la imagen
+	# - COPY solo copia archivos locales o directorios
+	# - ADD permite agregar archivos desde URLs
+
+COPY . .  	
+	# copy from working directory to working directory in container
+
+COPY . /dir
+	# copy to dir folder in container
+
+RUN:
+	# corre al crear la imagen, a diferencia de CMD que corre al inicializar el container
+	# corre en el working directory
+
+EXPOSE:			
+	# Expone el puerto, es opcional
+	EXPOSE 3000
+
+VOLUME:			
+	# Crea un volumen compartido entre el container y las carpetas locales
+	VOLUME["/app/feedback"]
+
+CMD: 
+	# Solo puede haber una instruccion CMD en el dockerfile, 
+	# si hay varias solo se toma el ultimo
+	
+	# Setea la configuracion por defecto para la ejecucion del container 
+	# corre al inicializar el container
+
+	# cuando el comando está compuesto de varios strings se debe lanzar un arreglo
+	CMD ["node", "server.js"]
+```
+
+### Ejemplo
+```DockerFile
+
+	FROM ubuntu:18:04 	//base image, este SO es disponible libremente en Docker HUB
+						//por lo que no necesitamos autorizacion
+						//se esta omitiendo el hostname
+
+	COPY . /app			//se presume que tenemos un directorio app en el working directory
+						//el directorio y su contenido se copiara como una nueva capa en la imagen
+
+	RUN  make /app 		//compila la aplicacion
+
+	CMD python/app/app.py 
+						//provee un mefanismo por defecto para correr el container.
+
+```
+
+
+```
+XXXXXXXXXXXXXXXX
+CASOS DE USO
+XXXXXXXXXXXXXXXX
+
+*****************
+CASO DE USO 1: backend, frontend, mongodb
+*****************
+
+//lanzar mongodb en container, se expone el puerto para poder conectarse desde el local
+												<image>				
+~docker run --name mongodb --rm -d -p 27017:27017 mongo
+
+//build y lanzar front
+
+FROM node
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+EXPOSE 80
+CMD ["node", "app.js"]
+
+~docker build -t goals-node .
+~docker run --name goals-backend --rm goals-node
+
+
+******************
+CASO DE USO 2: MONGO + BACKEND NODE + FRONT REACT mas complejo
+conectar a localhost o a otro container desde docker:
+******************
+
+1.
+//conectar a un servicio usando de network la maquina host:
+//cambiar localhost por host.docker.internal
+//por ejemplo
+'mongodb://localhost:27017/swfavorites' -> 'mongodb://host.docker.internal:27017/swfavorites'
+//ojo en linux, cuando se lanza el container que se conecta a la db necesitas agregar el siguiente flag
+--add-host=host.docker.internal:host-gateway
+
+~docker run --name goals-backend --rm -d  --add-host=host.docker.internal:host-gateway -p 80:80 goals-node
+~docker run --name goals-frontend --rm -d --add-host=host.docker.internal:host-gateway -p 3000:3000 goals-react
+
+2.
+//conectar a un servicio en otro container sin usar network:
+//obtener ip de container usando docker inspect 
+//cambiar ip
+'mongodb://localhost:27017/swfavorites' -> 'mongodb://172.17.0.2:27017/swfavorites'
+
+3.
+//conectar a un servicio en otro container usando network:
+//NOTA: React se ejecuta en el navegador, no en docker, por lo que se necesita:
+	un mongodb en network con backend
+	un backend en localhost con frontend
+	entonces, backend correrá tanto en network como en localhost
+//en backend usar el nombre del contenedor al que se desea acceder (porque usara network)
+'mongodb://localhost:27017/course-goals' -> 'mongodb://mongodb:27017/course-goals'	//el segundo mongodb es el <container_name> y "course-goals" es el nombre de la tabla
+
+~docker run -d --name mongodb --rm --network goals-net -p 27017:27017 mongo 		//exponemos puerto para conectarnos con Compass
+~docker run --name goals-backend --rm -d  --network goals-net -p 80:80 goals-node	//aca tambien expone el puerto
+
+//usar localhost en frontend porque react no corre en el docker, corre en navegador, no es necesario cambiar a host.docker.internal porque al correr en el navegador, no tiene nada que ver con docker
+"http://localhost/goals/"
+
+~docker run --name goals-frontend --rm  -d  -p 3000:3000  goals-react
+
+
+********
+persistencia de db:
+********
+
+//se agrega un named volume a la ruta donde mongo guarda la bd dentro del container, hay que crearlo desde el comando
+//se agrega autenticacion en la creacion del container
+~docker run -d --name mongodb --rm --network goals-net -p 27017:27017 -v data:/data/db \
+	-e MONGO_INITDB_ROOT_USERNAME=admin \
+	-e MONGO_INITDB_ROOT_PASSWORD=password \
+	mongo    		//    /data/db es la ruta interna del container
+
+//cambiar en backend el uri
+'mongodb://admin:password@mongodb:27017/course-goals?authSource=admin'
+
+
+*********
+named volume and bind mount
+*********
+//un named volume logs, un bind mount al working directory, un anon volume para conservar node_modules y COPY no lo sobreescriba
+//ademas agregamos variables de entorno en un archivo .env cambiando el uri de la db
+
+//en codigo
+`mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@mongodb:27017/course-goals?authSource=admin`
+
+//en Dockerfile
+	#var            default
+ENV MONGODB_USERNAME=value
+ENV MONGODB_PASSWORD=value
+
+//en .env
+MONGODB_USERNAME=admin
+MONGODB_PASSWORD=password
+
+~docker run --name goals-backend --rm -d  --network goals-net -p 80:80 \
+	-v logs:/app/logs 	-v $(pwd):/app  -v /app/node_modules \
+	--env-file ./.env  goals-node	
+
+
+//un bind mount para el codigo
+~docker run --name goals-frontend --rm  -d  -p 3000:3000 -v $(pwd)/src:/app/src goals-react
+
+//in package.json
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon app.js"
+  },
+
+  "devDependencies": {
+    "nodemon":"2.0.20"
+  }
+
+//in Dockerfile
+CMD ["npm", "start"]
+
+
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+DOCKER COMPOSE
+XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+//run
+docker-compose up -d
+//stop
+docker-compose down
+//stop y remove volumes
+docker-compose down -v
+
+
+************
+ejemplo docker
+************
+
+---------------------
+Create Network
+---------------------
+
+docker network create goals-net
+
+---------------------
+Run MongoDB Container
+---------------------
+
+docker run --name mongodb \
+  -e MONGO_INITDB_ROOT_USERNAME=max \
+  -e MONGO_INITDB_ROOT_PASSWORD=secret \
+  -v data:/data/db \
+  --rm \
+  -d \
+  --network goals-net \
+  mongo
+
+---------------------
+Build Node API Image
+---------------------
+
+docker build -t goals-node .
+
+---------------------
+Run Node API Container
+---------------------
+
+docker run --name goals-backend \
+  -e MONGODB_USERNAME=max \
+  -e MONGODB_PASSWORD=secret \
+  -v logs:/app/logs \
+  -v /Users/maximilianschwarzmuller/development/teaching/udemy/docker-complete/backend:/app \
+  -v /app/node_modules \
+  --rm \
+  -d \
+  --network goals-net \
+  -p 80:80 \
+  goals-node
+
+---------------------
+Build React SPA Image
+---------------------
+
+docker build -t goals-react .
+
+---------------------
+Run React SPA Container
+---------------------
+
+docker run --name goals-frontend \
+  -v /Users/maximilianschwarzmuller/development/teaching/udemy/docker-complete/frontend/src:/app/src \
+  --rm \
+  -d \
+  -p 3000:3000 \
+  -it \
+  goals-react
+
+---------------------
+Stop all Containers
+---------------------
+
+docker stop mongodb goals-backend goals-frontend
+
+
+***********
+ejemplo docker compose
+***********
+
+version: "3.8"
+services: 
+  mongodb:
+    image: "mongo"
+    #no es necesario agregar --rm -d ya que son estados por defecto
+    volumes:
+      - data:/data/db
+    #env se puede setear manualmente o desde un archivo .env
+    # enviroment:
+    #   MONGO_INITDB_ROOT_USERNAME: admin
+    #   MONGO_INITDB_ROOT_PASSWORD: password
+    env_file: 
+      - ./env/mongo.env
+    #network no es necesario porque compose crea un network 
+    #para todos los servicios, igual se puede nombrar
+    # networks: 
+    #   - goals-net 
+  
+  backend:
+    build: ./backend
+    ports: 
+      - "80:80"
+    # networks: 
+    #   - goals-net 
+    #no es necesario agregar --rm -d ya que son estados por defecto
+    volumes:
+      - logs:/app/logs   #named   
+      - ./backend:/app     #bind mount
+      - /app/node_modules #anon
+    env_file: 
+      - ./env/backend.env    
+    depends_on: 
+      - "mongodb"
+      
+  frontend:
+    build: ./frontend
+    ports: 
+      - "3000:3000"
+    #no es necesario agregar --rm -d ya que son estados por defecto
+    volumes:
+      - ./frontend/src:/app/src     #bind mount        
+    stdin_open: true  # -it es input + tty
+    tty: true
+    depends_on: 
+    - "backend"
+  
+
+#solo los named volumes se deben especificar fuera de los servicios
+#gracias a esto tambien se pueden compartir
+volumes:
+  data:
+  logs:
+
+
+#if error
+#sudo lsof -i -P -n | grep <port number>
+#sudo kill <process id>
+#docker-compose up -d
+#docker-compose down 
+
+//forzar build al arrancar
+~docker-compose up --build -d
+
+
+
+------------------------------------------
+
+EKS
+
+crear eks
+	rol: usecase- eks cluster
+crear node group
+	rol:
+		AmazonEKSWorkerNodePolicy
+		AmazonEKS_CNI_Policy
+		AmazonEC2ContainerRegistriReadOnly
+
+aws eks --region us-east-1 update-kubeconfig --name clusterv2
+
+kubectl cluster-info 
+
+kubectl get nodes
+
+kubectl create deployment apache --image=httpd
+
+kubectl get all
+
+kubectl expose deployment apache --type=LoadBalancer --port=80
+
+yaml for Create EKS Cluster with Workers: vpc subnets nodegroups workers instancetype desiredCapacity
+
+yaml for Create Deploy Manifest    ecr
+
+yaml for Create service manifest   8080
+
+```

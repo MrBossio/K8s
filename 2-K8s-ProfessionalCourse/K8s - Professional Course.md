@@ -123,3 +123,30 @@ Programa la ejecución de _Jobs_ en intervalos.
     - The **kubelet** uses **Docker** (or the **Container Runtime Interface/CRI**) to launch the new container.        
 - Once the **API server** receives the confirmation **regarding** the pod's status, and writes **it** in **etcd**, **it** sends a new message to the **kubelet** with the health status.
 
+# 4. Declarative and imperative declaration
+
+- Imperative: You define the steps to achieve a status, "what to do".
+	- Example: Commands using the CLI 
+- Declarative: You define the desired status.
+	- Example: Using a json or yaml file
+
+```yaml
+#pod.yml
+
+apiVersion: v1 #defines the directives we will use on this configuration
+kind: Pod #the object what we are configuring
+metadata: 
+  name: nginx-test
+spec:
+  containers:
+    - name: nginx-container
+	  image: nginx
+		ports:
+          - containerPort: 80
+```
+To run:
+```shell
+#-f to define the filepath
+kubectl apply -f ./pod.yml
+```
+

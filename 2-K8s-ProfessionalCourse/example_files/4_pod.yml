@@ -1,0 +1,11 @@
+#4_pod.yml
+apiVersion: v1 #defines the directives we will use on this configuration
+kind: Pod #the object what we are configuring
+metadata: 
+  name: nginx-test
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80

@@ -22,6 +22,19 @@ Manages the workload and runs the containers.
 
 # 2. Install
 1. you need docker installed
+```shell
+# if you are using a non root user:
+
+# test if you are part of the docker group
+id
+
+# add yourself to the group
+sudo usermod -aG docker $USER
+newgrp docker
+
+# test your access
+docker info
+```
 
 2.  Installing kind from binaries (optional: minikube)
 ```bash
@@ -37,21 +50,21 @@ kind --version
 
 - Create a cluster.yml config file
 ```yaml
-# cluster.yml
+# 2_cluster.yml
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
-	- role: control-plane
-	  image: kindest/node:v1.30.10
-	- role: worker
-	  image: kindest/node:v1.30.10  
-	- role: worker
-	  image: kindest/node:v1.30.10  	  
+  - role: control-plane
+    image: kindest/node:v1.30.10
+  - role: worker
+    image: kindest/node:v1.30.10
+  - role: worker
+    image: kindest/node:v1.30.10 	  
 ```
 
 - create the cluster
 ```shell
-kind create cluster --config cluster.yml
+kind create cluster --config 2_cluster.yml
 
 #output
 Creating cluster "kind" ...
@@ -131,8 +144,7 @@ Programa la ejecución de _Jobs_ en intervalos.
 	- Example: Using a json or yaml file
 
 ```yaml
-#pod.yml
-
+#4_pod.yml
 apiVersion: v1 #defines the directives we will use on this configuration
 kind: Pod #the object what we are configuring
 metadata: 
@@ -140,13 +152,13 @@ metadata:
 spec:
   containers:
     - name: nginx-container
-	  image: nginx
-		ports:
-          - containerPort: 80
+      image: nginx
+      ports:
+        - containerPort: 80
 ```
 To run:
 ```shell
 #-f to define the filepath
-kubectl apply -f ./pod.yml
+kubectl apply -f ./4_pod.yml
 ```
 
